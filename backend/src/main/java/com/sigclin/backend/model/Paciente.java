@@ -21,12 +21,11 @@ public class Paciente {
     private String nombres;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private String numDocumento;
+    private String dni;
     private String telefono;
     private String direccion;
     private LocalDate fechaNacimiento;
     
-    // ❌ BORRA ESTAS LÍNEAS SI LAS HABÍAS PUESTO:
     // private String email;
     // private String password;
 }
