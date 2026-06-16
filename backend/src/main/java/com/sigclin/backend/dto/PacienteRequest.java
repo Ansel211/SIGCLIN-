@@ -1,10 +1,11 @@
 package com.sigclin.backend.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PacienteRequest {
 
+    private String dni;
     private String nombres;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -19,8 +21,5 @@ public class PacienteRequest {
     private String telefono;
     private String direccion;
     private LocalDate fechaNacimiento;
-    
-    // Aquí puedes agregar campos específicos de TU tabla paciente si los tienes, por ejemplo:
-    // private String nroHistoriaClinica;
-    // private String tipoSeguro;
+    private String estado;
 }

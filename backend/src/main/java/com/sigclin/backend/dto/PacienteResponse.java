@@ -1,10 +1,11 @@
 package com.sigclin.backend.dto;
 
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -12,7 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PacienteResponse {
 
-    private Long idPaciente; // <-- ¡Clave! El Frontend necesita el ID para editar o eliminar
+    private Long idPaciente;
+    private String dni;
     private String nombres;
     private String apellidoPaterno;
     private String apellidoMaterno;
@@ -20,8 +22,5 @@ public class PacienteResponse {
     private String telefono;
     private String direccion;
     private LocalDate fechaNacimiento;
-    
-    // Aquí puedes meter campos de control que le sirvan al Frontend, por ejemplo:
-    // private Boolean activo; 
-    // private String nombreCompleto; // (puedes juntar nombres + apellidos en el service)
+    private String estado;
 }

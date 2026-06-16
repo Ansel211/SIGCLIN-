@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIGCLIN - Acceso</title>
+  <link rel="stylesheet" href="sigclin.css">
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Sistema de Gestion Clinica SIGCLIN</h1>
+      <span>Modulo Base y Autenticacion - Sprint 1</span>
+    </div>
+    <nav><span id="tokenLabel">Sin sesion activa</span></nav>
+  </header>
+  <main class="auth-shell">
+    <section class="auth-card" id="authCard">
+      <div class="tabs">
+        <button class="tab active" id="tabLogin" onclick="mostrarPanelAuth('login')">Ingresar</button>
+        <button class="tab" id="tabRegistro" onclick="mostrarPanelAuth('registro')">Crear cuenta</button>
+        <button class="tab" id="tabRecuperar" onclick="mostrarPanelAuth('recuperar')">Recuperar</button>
+      </div>
+
+      <div class="auth-panel active" id="panelLogin">
+        <h2>Inicio de sesion</h2>
+        <label>Email</label><input id="loginEmail" value="usuario@sigclin.pe">
+        <label>Contrasena</label><input id="loginPassword" type="password" value="123456">
+        <button onclick="login()">Iniciar sesion</button>
+        <button class="secondary" onclick="mostrarPanelAuth('registro')">Registrar usuario</button>
+      </div>
+
+      <div class="auth-panel" id="panelRegistro">
+        <h2>Registro de usuario</h2>
+        <label>Email</label><input id="regEmail" value="usuario@sigclin.pe">
+        <label>Contrasena</label><input id="regPassword" type="password" value="123456">
+        <label>Nombres</label><input id="regNombres" value="Marco">
+        <label>Apellidos</label><input id="regApellidos" value="Estudiante">
+        <button onclick="registrar()">Crear cuenta</button>
+        <button class="secondary" onclick="mostrarPanelAuth('login')">Ya tengo cuenta</button>
+      </div>
+
+      <div class="auth-panel" id="panelRecuperar">
+        <h2>Recuperar contrasena</h2>
+        <p class="muted">Ingresa el correo registrado para solicitar la recuperacion de acceso.</p>
+        <label>Email</label><input id="recEmail" value="usuario@sigclin.pe">
+        <button onclick="recuperarPassword()">Enviar recuperacion</button>
+        <button class="secondary" onclick="mostrarPanelAuth('login')">Volver al ingreso</button>
+      </div>
+
+      <div class="status" id="salida">Elige ingresar o crear cuenta para iniciar la demostracion.</div>
+    </section>
+
+    <section class="profile-sprint hidden" id="profileSection">
+      <div class="profile-header">
+        <div>
+          <span class="eyebrow">Panel del usuario</span>
+          <h2>Bienvenido a SIGCLIN</h2>
+          <p class="muted" id="profileHelp">Sesion iniciada. Desde aqui se completa HU02: edicion de perfil, preferencias, notificaciones y almacenamiento seguro.</p>
+        </div>
+        <div class="profile-actions">
+          <span class="badge" id="emailBadge">Email pendiente</span>
+          <button class="secondary compact" onclick="verificarEmail()">Verificar email</button>
+          <button class="compact" onclick="cerrarSesion()">Cerrar sesion</button>
+        </div>
+      </div>
+      <div class="profile-grid">
+        <div>
+          <label>Nombres</label><input id="perfilNombres" value="Marco Antonio" data-requires-session disabled>
+          <label>Apellidos</label><input id="perfilApellidos" value="Estudiante SIGCLIN" data-requires-session disabled>
+          <label>Foto de perfil</label>
+          <input id="perfilFoto" type="hidden" value="" data-requires-session disabled>
+          <div class="photo-preview inline-preview" id="fotoDropZone">
+            <img id="perfilFotoPreview" alt="Vista previa de foto de perfil">
+            <div>
+              <strong>Selecciona o arrastra una imagen</strong>
+              <span>Formatos permitidos: PNG, JPG o JPEG</span>
+              <input id="perfilFotoArchivo" type="file" accept="image/png,image/jpeg" onchange="cargarFotoPerfil(this.files[0])" data-requires-session disabled>
+            </div>
+          </div>
+          <label>Preferencias</label><textarea id="perfilPreferencias" data-requires-session disabled>Recordatorios por correo y atencion preferente en manana.</textarea>
+          <label class="toggle-row">
+            <input id="perfilNotificaciones" type="checkbox" checked data-requires-session disabled>
+            <span>Recibir notificaciones del sistema</span>
+          </label>
+          <button onclick="actualizarPerfil()" data-requires-session disabled>Guardar perfil</button>
+          <button class="secondary" onclick="guardarNotificaciones()" data-requires-session disabled>Guardar notificaciones</button>
+          <div class="status profile-status" id="perfilSalida">Actualiza tu perfil y guarda los cambios.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="sigclin.js"></script>
+</body>
+</html>
