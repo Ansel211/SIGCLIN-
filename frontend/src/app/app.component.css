@@ -1,0 +1,13 @@
+.auth-card {
+  max-width: 760px;
+  min-height: 520px;
+}
+
+.nav-link {
+  color: #334155;
+  font-weight: 700;
+}
+
+.nav-link.active {
+  color: #fff;
+}

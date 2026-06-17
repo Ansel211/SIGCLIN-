@@ -1,0 +1,52 @@
+:root {
+  --sigclin-brand: #8f1d55;
+  --sigclin-dark: #6d153f;
+  --sigclin-soft: #eef2f7;
+}
+
+body {
+  background: var(--sigclin-soft);
+  color: #17212b;
+}
+
+.sigclin-navbar {
+  background: var(--sigclin-brand);
+}
+
+.sigclin-title {
+  color: var(--sigclin-dark);
+}
+
+.btn-sigclin {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--sigclin-brand);
+  --bs-btn-border-color: var(--sigclin-brand);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--sigclin-dark);
+  --bs-btn-hover-border-color: var(--sigclin-dark);
+}
+
+.nav-pills .nav-link.active {
+  background: var(--sigclin-brand);
+}
+
+.profile-photo {
+  width: 86px;
+  height: 86px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 1px #d9e2ec;
+}
+
+.drop-zone {
+  border: 1px dashed #b8c4d2;
+  border-radius: .75rem;
+  background: #fbfdff;
+  transition: border-color .15s ease, background .15s ease;
+}
+
+.drop-zone.dragging {
+  border-color: var(--sigclin-brand);
+  background: #fdf2f8;
+}
