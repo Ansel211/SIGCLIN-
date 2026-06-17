@@ -1,0 +1,163 @@
+<nav class="navbar navbar-expand-lg navbar-dark sigclin-navbar px-4 py-3">
+  <div>
+    <span class="navbar-brand fw-bold mb-0 h1">Sistema de Gestion Clinica SIGCLIN</span>
+    <div class="text-white-50 small">Modulo Base y Autenticacion - Sprint 1</div>
+  </div>
+  <div class="ms-auto text-white small">{{ estadoSesion }}</div>
+</nav>
+
+<main class="container py-4">
+  <section *ngIf="!sesionActiva" class="card shadow-sm mx-auto auth-card">
+    <div class="card-body p-4">
+      <ul class="nav nav-pills gap-2 border-bottom pb-3 mb-4">
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="panelActivo === 'login'" (click)="mostrarPanel('login')">Ingresar</button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="panelActivo === 'registro'" (click)="mostrarPanel('registro')">Crear cuenta</button>
+        </li>
+        <li class="nav-item">
+          <button type="button" class="nav-link" [class.active]="panelActivo === 'recuperar'" (click)="mostrarPanel('recuperar')">Recuperar</button>
+        </li>
+      </ul>
+
+      <form *ngIf="panelActivo === 'login'" (ngSubmit)="login()" class="vstack gap-3">
+        <h2 class="h4 sigclin-title">Inicio de sesion</h2>
+        <div>
+          <label class="form-label fw-semibold" for="loginEmail">Email</label>
+          <input id="loginEmail" class="form-control" name="loginEmail" [(ngModel)]="loginForm.email">
+        </div>
+        <div>
+          <label class="form-label fw-semibold" for="loginPassword">Contrasena</label>
+          <input id="loginPassword" class="form-control" type="password" name="loginPassword" [(ngModel)]="loginForm.password">
+        </div>
+        <div>
+          <button class="btn btn-sigclin me-2" type="submit">Iniciar sesion</button>
+          <button class="btn btn-secondary" type="button" (click)="mostrarPanel('registro')">Registrar usuario</button>
+        </div>
+      </form>
+
+      <form *ngIf="panelActivo === 'registro'" (ngSubmit)="registrar()" class="vstack gap-3">
+        <h2 class="h4 sigclin-title">Registro de usuario</h2>
+        <div>
+          <label class="form-label fw-semibold" for="regEmail">Email</label>
+          <input id="regEmail" class="form-control" name="regEmail" [(ngModel)]="registroForm.email">
+        </div>
+        <div>
+          <label class="form-label fw-semibold" for="regPassword">Contrasena</label>
+          <input id="regPassword" class="form-control" type="password" name="regPassword" [(ngModel)]="registroForm.password">
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold" for="regNombres">Nombres</label>
+            <input id="regNombres" class="form-control" name="regNombres" [(ngModel)]="registroForm.nombres">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold" for="regApellidos">Apellidos</label>
+            <input id="regApellidos" class="form-control" name="regApellidos" [(ngModel)]="registroForm.apellidos">
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-sigclin me-2" type="submit">Crear cuenta</button>
+          <button class="btn btn-secondary" type="button" (click)="mostrarPanel('login')">Ya tengo cuenta</button>
+        </div>
+      </form>
+
+      <form *ngIf="panelActivo === 'recuperar'" (ngSubmit)="recuperarPassword()" class="vstack gap-3">
+        <h2 class="h4 sigclin-title">Recuperar contrasena</h2>
+        <p class="text-secondary mb-0">Ingresa el correo registrado para solicitar la recuperacion de acceso.</p>
+        <div>
+          <label class="form-label fw-semibold" for="recEmail">Email</label>
+          <input id="recEmail" class="form-control" name="recEmail" [(ngModel)]="recuperarEmail">
+        </div>
+        <div>
+          <button class="btn btn-sigclin me-2" type="submit">Enviar recuperacion</button>
+          <button class="btn btn-secondary" type="button" (click)="mostrarPanel('login')">Volver al ingreso</button>
+        </div>
+      </form>
+
+      <div class="alert alert-light border mt-4 mb-0" role="status">{{ mensaje }}</div>
+    </div>
+  </section>
+
+  <section *ngIf="sesionActiva" class="card shadow-sm">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 border-bottom pb-3 mb-4">
+        <div>
+          <span class="text-uppercase small fw-bold sigclin-title">Panel del usuario</span>
+          <h2 class="display-6 sigclin-title mb-2">Bienvenido a SIGCLIN</h2>
+          <p class="text-secondary mb-0">Desde aqui se completa HU02: edicion de perfil, foto, preferencias y notificaciones.</p>
+        </div>
+        <div class="d-flex align-items-start gap-2">
+          <span class="badge rounded-pill" [class.text-bg-success]="usuario?.emailVerificado" [class.text-bg-warning]="!usuario?.emailVerificado">
+            {{ usuario?.emailVerificado ? 'Email verificado' : 'Email pendiente' }}
+          </span>
+          <button class="btn btn-secondary btn-sm" type="button" (click)="verificarEmail()">Verificar email</button>
+          <button class="btn btn-sigclin btn-sm" type="button" (click)="cerrarSesion()">Cerrar sesion</button>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <form (ngSubmit)="guardarPerfil()" class="vstack gap-3">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="perfilNombres">Nombres</label>
+                <input id="perfilNombres" class="form-control" name="perfilNombres" [(ngModel)]="perfilForm.nombres">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-semibold" for="perfilApellidos">Apellidos</label>
+                <input id="perfilApellidos" class="form-control" name="perfilApellidos" [(ngModel)]="perfilForm.apellidos">
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label fw-semibold">Foto de perfil</label>
+              <div class="drop-zone p-3 d-flex align-items-center gap-3"
+                   [class.dragging]="fotoDragging"
+                   (dragover)="$event.preventDefault(); fotoDragging = true"
+                   (dragleave)="fotoDragging = false"
+                   (drop)="soltarFoto($event)">
+                <img class="profile-photo" [src]="perfilForm.fotoPerfilUrl || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2286%22 height=%2286%22%3E%3Crect width=%2286%22 height=%2286%22 fill=%22%23e2e8f0%22/%3E%3C/svg%3E'" alt="Foto de perfil">
+                <div class="flex-grow-1">
+                  <strong class="d-block sigclin-title">Selecciona o arrastra una imagen</strong>
+                  <span class="text-secondary small d-block mb-2">Formatos permitidos: PNG, JPG o JPEG. Maximo 600 KB.</span>
+                  <input class="form-control" type="file" accept="image/png,image/jpeg" (change)="seleccionarFoto($event)">
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label fw-semibold" for="perfilPreferencias">Preferencias</label>
+              <textarea id="perfilPreferencias" class="form-control" rows="4" name="perfilPreferencias" [(ngModel)]="perfilForm.preferencias"></textarea>
+            </div>
+
+            <div class="form-check form-switch border rounded p-3 ps-5 bg-light">
+              <input id="perfilNotificaciones" class="form-check-input" type="checkbox" name="perfilNotificaciones" [(ngModel)]="perfilForm.notificacionesActivas">
+              <label class="form-check-label" for="perfilNotificaciones">Recibir notificaciones del sistema</label>
+            </div>
+
+            <div>
+              <button class="btn btn-sigclin me-2" type="submit">Guardar perfil</button>
+              <button class="btn btn-secondary" type="button" (click)="guardarNotificaciones()">Guardar notificaciones</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="border rounded p-3 bg-light h-100">
+            <h3 class="h5 sigclin-title">HU02 - Gestion de perfil</h3>
+            <p class="text-secondary">El usuario autenticado puede editar sus datos personales, foto, preferencias y notificaciones.</p>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item bg-light">Edicion de nombre, foto y preferencias</li>
+              <li class="list-group-item bg-light">Configuracion de notificaciones</li>
+              <li class="list-group-item bg-light">Almacenamiento seguro de datos de perfil</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-light border mt-4 mb-0" role="status">{{ mensaje }}</div>
+    </div>
+  </section>
+</main>
