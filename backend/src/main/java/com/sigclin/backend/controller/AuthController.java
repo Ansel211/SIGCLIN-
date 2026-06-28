@@ -14,7 +14,7 @@ import com.sigclin.backend.dto.auth.RegistroRequest;
 import com.sigclin.backend.service.AuthService;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/auth") //los mapping indican que el metodo solo se activa cuando recibe una peticion http de tipo... 
 public class AuthController {
 
     private final AuthService authService;
