@@ -8,7 +8,7 @@ import com.sigclin.backend.dto.perfil.PerfilUpdateRequest;
 import com.sigclin.backend.model.Usuario;
 import com.sigclin.backend.repository.UsuarioRepository;
 import com.sigclin.backend.service.PerfilService;
-
+//actualizar nimbres, fichas de usuario, cambiar fotos 
 @Service
 public class PerfilServiceImpl implements PerfilService {
 
