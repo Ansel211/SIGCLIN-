@@ -12,13 +12,13 @@ import com.sigclin.backend.dto.auth.RegistroRequest;
 import com.sigclin.backend.model.Usuario;
 import com.sigclin.backend.repository.UsuarioRepository;
 import com.sigclin.backend.service.AuthService;
-
-@Service
+//entrada de las personas, crear cuentas y revisar contraseñas
+@Service //Le avisa a Spring Boot que esta clase debe ser registrada en su contenedor de memoria
 public class AuthServiceImpl implements AuthService {
 
     private final UsuarioRepository usuarioRepository;
-    private final PerfilMapper perfilMapper;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PerfilMapper perfilMapper; //acceso de base de datos y mapeador
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); 
 
     public AuthServiceImpl(UsuarioRepository usuarioRepository, PerfilMapper perfilMapper) {
         this.usuarioRepository = usuarioRepository;

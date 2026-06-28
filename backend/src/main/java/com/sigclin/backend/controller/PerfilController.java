@@ -30,8 +30,8 @@ public class PerfilController {
 
     @PutMapping("/{idUsuario}")
     public ResponseEntity<PerfilResponse> actualizarPerfil(
-            @PathVariable Long idUsuario,
-            @RequestBody PerfilUpdateRequest request) {
+            @PathVariable Long idUsuario, //sirve para capturar el id a traves de la url del navegador 
+            @RequestBody PerfilUpdateRequest request) { //RequestBody obliga agarrar el cuerpo del jason y meterlo dentro del objeto java 
         return ResponseEntity.ok(perfilService.actualizarPerfil(idUsuario, request));
     }
 
