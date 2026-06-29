@@ -17,6 +17,7 @@ type PanelAuth = 'login' | 'registro' | 'recuperar';
 export class AppComponent {
   panelActivo: PanelAuth = 'login';
   mensaje = 'Elige ingresar o crear cuenta para iniciar la demostracion.';
+  mensajeError = false;
   tokenSesion = localStorage.getItem('sigclin_token') || '';
   usuarioId = Number(localStorage.getItem('sigclin_usuario_id') || 0);
   usuario?: PerfilUsuario;
@@ -56,6 +57,7 @@ export class AppComponent {
 
   mostrarPanel(panel: PanelAuth): void {
     this.panelActivo = panel;
+    this.mensajeError = false;
     this.mensaje = panel === 'login'
       ? 'Ingresa tus credenciales para acceder al sistema.'
       : panel === 'registro'
@@ -79,7 +81,10 @@ export class AppComponent {
 
   recuperarPassword(): void {
     this.api.recuperarPassword(this.recuperarEmail).subscribe({
-      next: response => this.mensaje = response,
+      next: () => {
+        this.mensajeError = false;
+        this.mensaje = 'Solicitud enviada. Revisa tu correo para continuar con la recuperacion de cuenta.';
+      },
       error: error => this.mostrarError(error)
     });
   }
@@ -126,10 +131,12 @@ export class AppComponent {
   cargarFoto(file?: File): void {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
+      this.mensajeError = true;
       this.mensaje = 'Selecciona un archivo de imagen PNG o JPG.';
       return;
     }
     if (file.size > 600 * 1024) {
+      this.mensajeError = true;
       this.mensaje = 'La imagen es muy grande para esta demo. Usa una foto menor a 600 KB.';
       return;
     }
@@ -158,12 +165,14 @@ export class AppComponent {
     localStorage.setItem('sigclin_token', response.tokenSesion);
     localStorage.setItem('sigclin_usuario_id', String(response.usuario.idUsuario));
     this.cargarPerfil(response.usuario);
+    this.mensajeError = false;
     this.mensaje = `${response.mensaje}\nUsuario: ${response.usuario.nombres} ${response.usuario.apellidos}\nEmail: ${response.usuario.email}`;
   }
 
   private procesarPerfil(usuario: PerfilUsuario, mensaje: string): void {
     this.usuario = usuario;
     this.cargarPerfil(usuario);
+    this.mensajeError = false;
     this.mensaje = mensaje;
   }
 
@@ -177,9 +186,39 @@ export class AppComponent {
     };
   }
 
-  private mostrarError(error: { error?: unknown; message?: string }): void {
-    this.mensaje = typeof error.error === 'string'
-      ? error.error
-      : error.message || 'Ocurrio un error al procesar la solicitud.';
+  private mostrarError(error: { error?: unknown; message?: string; status?: number }): void {
+    this.mensajeError = true;
+
+    if (typeof error.error === 'string' && error.error.trim()) {
+      try {
+        const detalle = JSON.parse(error.error) as { message?: string };
+        this.mensaje = detalle.message || error.error;
+      } catch {
+        this.mensaje = error.error;
+      }
+      return;
+    }
+
+    if (error.error && typeof error.error === 'object' && 'message' in error.error) {
+      this.mensaje = String((error.error as { message?: unknown }).message);
+      return;
+    }
+
+    if (error.status === 400 && this.panelActivo === 'login') {
+      this.mensaje = 'Credenciales invalidas. Revisa tu email o contrasena.';
+      return;
+    }
+
+    if (error.status === 400 && this.panelActivo === 'registro') {
+      this.mensaje = 'No se pudo crear la cuenta. Revisa los datos o usa otro correo.';
+      return;
+    }
+
+    if (error.status === 400 && this.panelActivo === 'recuperar') {
+      this.mensaje = 'No se pudo enviar la solicitud. Verifica que el correo este registrado.';
+      return;
+    }
+
+    this.mensaje = error.message || 'Ocurrio un error al procesar la solicitud.';
   }
 }

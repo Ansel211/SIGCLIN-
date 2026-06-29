@@ -76,7 +76,7 @@
         </div>
       </form>
 
-      <div class="alert alert-light border mt-4 mb-0" role="status">{{ mensaje }}</div>
+      <div class="alert border mt-4 mb-0" [ngClass]="mensajeError ? 'alert-danger' : 'alert-light'" role="status">{{ mensaje }}</div>
     </div>
   </section>
 
@@ -157,7 +157,7 @@
         </div>
       </div>
 
-      <div class="alert alert-light border mt-4 mb-0" role="status">{{ mensaje }}</div>
+      <div class="alert border mt-4 mb-0" [ngClass]="mensajeError ? 'alert-danger' : 'alert-light'" role="status">{{ mensaje }}</div>
     </div>
   </section>
 </main>
