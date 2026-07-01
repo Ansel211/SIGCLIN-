@@ -22,6 +22,7 @@ export class AppComponent {
   usuarioId = Number(localStorage.getItem('sigclin_usuario_id') || 0);
   usuario?: PerfilUsuario;
   fotoDragging = false;
+  mostrarAlertaEmail: boolean = true;
 
   loginForm = {
     email: 'usuario@sigclin.pe',
@@ -119,11 +120,15 @@ export class AppComponent {
   }
 
   cerrarSesion(): void {
-    localStorage.removeItem('sigclin_token');
+   localStorage.removeItem('sigclin_token');
     localStorage.removeItem('sigclin_usuario_id');
     this.tokenSesion = '';
     this.usuarioId = 0;
     this.usuario = undefined;
+    
+    this.loginForm.email = '';
+    this.loginForm.password = '';
+
     this.panelActivo = 'login';
     this.mensaje = 'Sesion cerrada. Ingresa nuevamente para editar tu perfil.';
   }
@@ -167,6 +172,10 @@ export class AppComponent {
     this.cargarPerfil(response.usuario);
     this.mensajeError = false;
     this.mensaje = `${response.mensaje}\nUsuario: ${response.usuario.nombres} ${response.usuario.apellidos}\nEmail: ${response.usuario.email}`;
+
+    setTimeout(() => {
+      this.mostrarAlertaEmail = false;
+    }, 5000);
   }
 
   private procesarPerfil(usuario: PerfilUsuario, mensaje: string): void {
